@@ -1,0 +1,67 @@
+.wrapper-project {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.project {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  z-index: 99;
+  overflow: hidden;
+}
+
+.section-project {
+  width: 100%;
+  height: 100vh;
+  padding: 10px;
+}
+
+.header-project {
+  width: 100%;
+  padding-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.box-title-delete {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.title-project {
+  color: #fff;
+  font-size: 25px;
+}
+
+.icon-delete {
+  cursor: pointer;
+}
+
+.target-project {
+  width: 100%;
+  height: 600px;
+  border-radius: 10px;
+
+  overflow-y: auto;
+  color: #fff;
+  padding: 10px; 
+}
+
+.btn-save {
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+
+}

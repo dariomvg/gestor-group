@@ -1,0 +1,42 @@
+.nav-projects {
+    width: 200px;
+    height: 100vh;
+    padding: 10px;
+    border-right: 1px solid #eee;
+}
+
+.title-logo-nav {
+    color: #fff;
+    padding-bottom: 30px;
+    font-size: 25px;
+}
+
+.box-links-nav {
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.link-nav-project {
+    width: 100%;
+    border: 1px solid #fff;
+    padding: 5px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.link-nav-project:hover {
+    border-color:#ffffff8f ;
+    color: #ffffff8f;
+}
+
+
+
+
+
+
+

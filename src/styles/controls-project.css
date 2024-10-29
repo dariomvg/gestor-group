@@ -1,0 +1,19 @@
+.box-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-control {
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px;
+}
+.icon-control:hover {
+  background-color: #a6a6a643;
+}
+
+.icon-link {
+  text-decoration: none;
+}

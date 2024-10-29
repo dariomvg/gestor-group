@@ -1,0 +1,12 @@
+.card-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid #aaaaaa72;
+    border-bottom:1px solid #15f3eb;
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    height: 400px;
+    background-image: linear-gradient(to bottom, #141414, transparent);
+}

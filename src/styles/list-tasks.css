@@ -1,0 +1,163 @@
+.section-list-tasks {
+  width: 400px;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  backdrop-filter: blur(10px);
+  padding: 10px;
+  transform: translateX(400px);
+  transition: .5s;
+}
+
+.section-list-tasks.openList {
+    transform: translateX(0);
+    transition: .5s;
+} 
+.close-list {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.section-create-task {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title-create-task {
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+}
+
+.btn-create-task {
+  width: 100%;
+  font-weight: 500;
+  color: #000;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+}
+
+.section-tasks {
+  width: 100%;
+}
+
+.header-tasks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.title-header-tasks {
+  color: #fff;
+}
+.btns-header-tasks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.icon-header-tasks {
+  cursor: pointer;
+}
+
+.list-tasks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  overflow-y: auto;
+
+}
+
+.task {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.title-task {
+  color: #fff;
+  font-weight: 500;
+}
+
+.icon-delete {
+  cursor: pointer;
+}
+
+.sec-create-task {
+    width: 100%;
+    position: absolute;
+    top: -400px;
+    left: 0;
+  transition: 0.5s;
+}
+
+.sec-create-task.openCreate {
+  top: 0;
+  transition: 0.5s;
+}
+
+.box-create-task {
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.close-box-create {
+  color: #000;
+  border: none;
+  background-color: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.form-task {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-form-task {
+  width: 100%;
+  padding: 6px;
+  outline: none;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid #000;
+}
+
+.btn-form-task {
+  padding: 8px;
+  background-color: #fff;
+  color: #000;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 16px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
