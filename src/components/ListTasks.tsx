@@ -82,7 +82,6 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
           <ul className="list-tasks">
             {project.tasks.map((item) => (
               <li className="task" key={item.id}>
-                <input type="checkbox" name="" id="" />
                 <p className="title-task">{item.task}</p>
                 {viewDelete && (
                   <img
