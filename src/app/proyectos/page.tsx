@@ -3,11 +3,9 @@ import Link from "next/link";
 import "./proyectos.css";
 import { CardProject } from "@/components/CardProject";
 import { useHandleProject } from "@/hooks/useHandleProject";
-import { useContextProject } from "@/contexts/ContextProject";
 
-export default function proyectos() {
+export default function Proyectos() {
   const { projects } = useHandleProject();
-  const {user} = useContextProject(); 
 
   return (
     <section className="page-projects">

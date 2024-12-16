@@ -23,10 +23,8 @@ export default function Nuevo({ params }: PropsParams): JSX.Element {
   }, [project]);
 
   const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { value, name } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
