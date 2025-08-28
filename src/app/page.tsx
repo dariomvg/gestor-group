@@ -1,10 +1,10 @@
 import { Header } from "@/components/Header";
-import { CardMain } from "@/components/CardMain";
+import { CardHome } from "@/components/CardHome";
 import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import "./page.css";
 
-export default function Home(): JSX.Element {
+export default function Home() {
   return (
     <main className="main">
       <Header />
@@ -20,7 +20,7 @@ export default function Home(): JSX.Element {
         </Link>
       </section>
       <section className="section-cards">
-        <CardMain>
+        <CardHome>
           <h3 className="title-card">Colaborativo</h3>
           <ul className="box-items">
             <li className="item-card">Invita y agrega a quien quieras</li>
@@ -28,15 +28,15 @@ export default function Home(): JSX.Element {
               Elimina a un colabo rador cuando quieras
             </li>
           </ul>
-        </CardMain>
-        <CardMain>
+        </CardHome>
+        <CardHome>
           <h3 className="title-card">Simple</h3>
           <ul className="box-items">
             <li className="item-card">UI intuitiva</li>
             <li className="item-card">Fácil de usar y creación de proyectos</li>
           </ul>
-        </CardMain>
-        <CardMain>
+        </CardHome>
+        <CardHome>
           <h3 className="title-card">Múltiples usos</h3>
           <ul className="box-items">
             <li className="item-card">Lista de tareas</li>
@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
             <li className="item-card">Editor de texto </li>
             <li className="item-card">Más...</li>
           </ul>
-        </CardMain>
+        </CardHome>
       </section>
       <Footer />
     </main>

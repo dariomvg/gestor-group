@@ -6,8 +6,15 @@ import iconList from "@/assets/icons/list.svg";
 import iconMessages from "@/assets/icons/messages.svg";
 import Link from "next/link";
 import "@/styles/controls-project.css";
+import React from "react";
 
-export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element => {
+interface PropsControlsProject {
+  openList: () => void;
+  openModal: () => void;
+  openChat: () => void;
+}
+
+function ControlsProject ({ openList, openModal, openChat }: PropsControlsProject) {
 
   return (
     <div className="box-controls">
@@ -18,6 +25,7 @@ export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element 
           width={35}
           height={35}
           className="icon-control icon-link"
+          loading="lazy"
           title="Volver"
         />
       </Link>
@@ -28,6 +36,7 @@ export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element 
           width={35}
           height={35}
           className="icon-control icon-link"
+          loading="lazy"
           title="Nuevo proyecto"
         />
       </Link>
@@ -37,6 +46,7 @@ export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element 
         width={35}
         height={35}
         className="icon-control"
+        loading="lazy"
         onClick={openModal}
         title="Agregar colaborador"
       />
@@ -46,6 +56,7 @@ export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element 
         width={35}
         height={35}
         className="icon-control"
+        loading="lazy"
         onClick={openList}
         title="Ver tareas"
       />
@@ -55,9 +66,12 @@ export const ControlsProject = ({ openList, openModal, openChat }): JSX.Element 
         width={35}
         height={35}
         className="icon-control"
+        loading="lazy"
         onClick={openChat}
         title="Abrír chat"
       />
     </div>
   );
 }
+
+export default React.memo(ControlsProject)

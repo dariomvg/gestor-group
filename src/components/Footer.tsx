@@ -1,10 +1,10 @@
 import "../styles/footer.css";
 import iconGithub from "../assets/icons/github.svg";
 
-export const Footer = (): JSX.Element => {
+export const Footer = () => {
   return (
     <footer className="footer">
-      <p className="title-footer">© Copyright GestorGroup 2024</p>
+      <p className="title-footer">© GestorGroup 2025</p>
       <a
         href="https://github.com/dariomvg/gestor-group"
         className="link-footer"
@@ -16,6 +16,7 @@ export const Footer = (): JSX.Element => {
           width={25}
           height={25}
           className="icon-github"
+          loading="lazy"
         />
       </a>
     </footer>

@@ -2,25 +2,28 @@
 import { objBase } from "@/utils/object-project";
 import "./nuevo.css";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useContextProject } from "@/contexts/ContextProject";
 import { useRouter } from "next/navigation";
-import { useHandleProject } from "@/hooks/useHandleProject";
-import { useFindProject } from "@/hooks/useFindProject";
-import { PropsParams } from "@/types/pages";
+import { useAuth } from "@/contexts/ContextAuth";
+import { addNewProject, getProject, updateProject } from "@/libs/lib_projects";
 
-export default function Nuevo({ params }: PropsParams): JSX.Element {
+export default function Nuevo({ params }: {params: {id: string}}) {
+  const { id } = params;
   const [form, setForm] = useState(objBase);
   const [msg, setMsg] = useState("");
-  const { user } = useContextProject();
-  const { addProject } = useHandleProject();
-  const { project } = useFindProject(parseInt(params.id));
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (project) {
-      setForm(project);
+    if (id) {
+      const getEditProject = async () => {
+        const newProject = await getProject(parseInt(id));
+        if (newProject.length > 0) {
+          setForm(newProject[0]);
+        }
+      };
+      getEditProject();
     }
-  }, [project]);
+  }, [id]);
 
   const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -29,23 +32,27 @@ export default function Nuevo({ params }: PropsParams): JSX.Element {
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.password.length > 15 || form.password.length < 8) {
+    const titleProject = form.password.length;
+    const passwordProject = form.password.length;
+    if (passwordProject > 15 || passwordProject < 8) {
       setMsg("Contraseña debe ser de 8 a 15 caracteres");
       return;
     }
-    if (form.title.length > 15) {
-      setMsg("El título no puede superar los 15 caracteres");
+    if (titleProject > 15) {
+      setMsg("El título no debe superar los 15 caracteres");
       return;
     }
-    addProject(form, user);
+
+    if (form.id) {
+      updateProject(form);
+    } else {
+      addNewProject({ ...form, creator: user.username });
+    }
+
     setForm(objBase);
     setMsg("");
     router.push("/proyectos");
   };
-
-  if (!user) {
-    router.push("/registrarse");
-  }
 
   return (
     <section className="section-nuevo">
@@ -110,16 +117,16 @@ export default function Nuevo({ params }: PropsParams): JSX.Element {
             />
           </div>
           <div className="box-input">
-            <label htmlFor="last_date" className="label-input">
+            <label htmlFor="end_date" className="label-input">
               Término
             </label>
             <input
               type="date"
-              id="last_date"
+              id="end_date"
               className="input-form date"
               required
-              name="last_date"
-              value={form.last_date}
+              name="end_date"
+              value={form.end_date}
               onChange={changeInput}
             />
           </div>

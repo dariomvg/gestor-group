@@ -1,17 +1,12 @@
-import { ReactNode } from "react";
-
 export interface ObjBaseType {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   start_date: string;
-  last_date: string;
+  end_date: string;
   creator: string;
   content: string;
   password: string;
-
-  tasks: TaskType[];
-  messages: string[];
 }
 
 export interface TaskType {
@@ -20,12 +15,27 @@ export interface TaskType {
 }
 
 export interface ContextProjectTypes {
-    login: (data: string) => void; 
-    logout: () => void; 
-    user: string; 
+  login: (data: string) => void;
+  logout: () => void;
+  user: string;
 }
 
-export interface ChildrenContext {
-    children: ReactNode;
+export type ObjUser = { picture: string; username: string; user_id: string }
+  
+
+export interface ContextAuthTypes {
+  user: ObjUser
 }
 
+export interface Colaborator {
+  name: string
+}
+
+export interface CustomControls {
+  openChat: boolean;
+  openList: boolean;
+  openAdduser: boolean;
+  handleOpenList: () => void;
+  handleOpenModal: () => void;
+  handleOpenChat: () => void;
+}

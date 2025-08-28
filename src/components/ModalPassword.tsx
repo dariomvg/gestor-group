@@ -1,60 +1,45 @@
+"use client";
 import "../styles/modal-password.css";
 import iconView from "../assets/icons/view.svg";
 import iconHidden from "../assets/icons/hidden.svg";
 import iconCopy from "../assets/icons/copy.svg";
-import iconDelete from "../assets/icons/deleteColaborate.svg";
-import { useState } from "react";
-import { PropsListColaborates, PropsModalPassword } from "@/types/components";
+import React, { useEffect, useState } from "react";
+import { ObjBaseType } from "@/types/global";
+import { useAuth } from "@/contexts/ContextAuth";
+import { updateNewPassword } from "@/libs/lib_password";
+import { getAllColaborates } from "@/libs/lib_colaborators";
+import { ListColaborators } from "./ListColaborators";
+import { hidden_password } from "@/utils/password-hidden";
 
-const ListColaborates = ({ colaborators, verifyRemoveColaborate }: PropsListColaborates): JSX.Element => {
+interface PropsModal {
+  open: boolean;
+  handleOpenModal: () => void;
+  project: ObjBaseType;
+}
 
-  return (
-    <ul className="list-colaborates">
-      {colaborators.length > 0 &&
-        colaborators.map((user, index) => (
-          <li className="colaborate" key={index}>
-            {user.name}
-            <img
-              src={iconDelete.src}
-              alt="icon delete colaborate"
-              width={25}
-              height={25}
-              className="delete-colaborate"
-              title="eliminar colaborador"
-              onClick={() => verifyRemoveColaborate(user.name)}
-            />
-          </li>
-        ))}
-    </ul>
-  );
-};
-
-export const ModalPassword = ({
-  open,
-  handleOpenModal,
-  project, 
-  changePassword,
-  removeColaborate,
-  colaborators,
-  user
-}: PropsModalPassword): JSX.Element => {
-
+function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
+  const [colaborators, setColaborators] = useState([]);
   const [viewPass, setViewPass] = useState(false);
   const [msg, setMsg] = useState("");
+  const { user } = useAuth();
+
+  const changePassword = () => {
+    const newPassword = "Colocar crypto UUID, para a contraseña";
+    updateNewPassword(newPassword, project.id);
+  };
 
   const copyPassword = () => {
     navigator.clipboard.writeText(project.password);
     setMsg("Copiado");
   };
 
-  const verifyRemoveColaborate = (nameUser: string) => {
-    if(user !== project.creator){
-      setMsg("No tiene la autorizacion para eliminar miembros"); 
-      return; 
-    }
-    removeColaborate(nameUser)
-  }
-
+  useEffect(() => {
+    const getColaborators = async () => {
+      const newColaborators = await getAllColaborates(project.id);
+      if (newColaborators.length > 0) setColaborators(newColaborators);
+    };
+    getColaborators();
+  }, []);
 
   return (
     <section className={`modal-password ${open ? "openModal" : ""}`}>
@@ -65,11 +50,13 @@ export const ModalPassword = ({
         <p className="title-modal">
           puedes agregar colaboradores compartiendo la contraseña del proyecto
         </p>
-        <button className="btn-create-pass" onClick={changePassword}>Cambiar contraseña</button>
+        <button className="btn-create-pass" onClick={changePassword}>
+          Cambiar contraseña
+        </button>
         {msg && <p className="msg-copy">{msg}</p>}
         <div className="box-password">
           <p className="password">
-            {viewPass ? project.password : "******************"}
+            {viewPass ? project.password : hidden_password}
           </p>
           <div className="icons-box-password">
             <img
@@ -78,6 +65,7 @@ export const ModalPassword = ({
               width={30}
               height={30}
               className="icon-password"
+              loading="lazy"
               title="Copiar contraseña"
               onClick={copyPassword}
             />
@@ -88,6 +76,7 @@ export const ModalPassword = ({
                 width={30}
                 height={30}
                 className="icon-password"
+                loading="lazy"
                 title="Ocultar contraseña"
                 onClick={() => setViewPass(!viewPass)}
               />
@@ -97,6 +86,7 @@ export const ModalPassword = ({
                 alt="icon view"
                 width={30}
                 height={30}
+                loading="lazy"
                 className="icon-password"
                 title="Ver contraseña"
                 onClick={() => setViewPass(!viewPass)}
@@ -105,7 +95,13 @@ export const ModalPassword = ({
           </div>
         </div>
       </div>
-      <ListColaborates colaborators={colaborators} verifyRemoveColaborate={verifyRemoveColaborate} />
+      <ListColaborators
+        colaborators={colaborators}
+        actualUser={user.username}
+        creator={project.creator}
+      />
     </section>
   );
-};
+}
+
+export default React.memo(ModalPassword);

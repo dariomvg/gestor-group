@@ -1,12 +1,11 @@
-import ProviderProject from "@/contexts/ContextProject";
 import type { Metadata } from "next";
 import "./globals.css";
+import ProviderAuth from "@/contexts/ContextAuth";
 
 export const metadata: Metadata = {
-  title:
-    "GestorGroup - gestiona tus proyectos con tu grupo de trabajo o estudio",
+  title: "GestorGroup - Gestor de proyectos",
   description:
-    "Gestiona tus tareas, proyectos de trabajo, estudio o personal invitando colaboradores para aportar",
+    "Gestiona tus tareas y/o proyectos de trabajo, estudio o personal con tu propio grupo",
   keywords: ["proyectos", "gestionar", "colaboradores", "herramientas"],
 };
 
@@ -16,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ProviderProject>{children}</ProviderProject>
+        <ProviderAuth>{children}</ProviderAuth>
       </body>
     </html>
   );

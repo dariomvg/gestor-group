@@ -1,9 +1,10 @@
 import Link from "next/link";
-import "../styles/menu-projects.css"; 
-import { PropsLinkProject } from "@/types/components";
+import "../styles/menu-projects.css";
 
-export const LinkProject = ({id, title}: PropsLinkProject): JSX.Element => {
+export const LinkProject = ({ id, title }: { id: number; title: string }) => {
   return (
-    <Link href={`/proyectos/${id}`} className="link-nav-project">{title}</Link>
-  )
-}
+    <Link href={`/proyectos/${id}`} className="link-nav-project">
+      {title}
+    </Link>
+  );
+};

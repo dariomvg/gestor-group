@@ -1,29 +1,32 @@
 "use client";
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import "../styles/verify-pass.css";
-import { getColaborate, verifyPassword } from "@/libs/services";
+import { verifyPassword } from "@/libs/lib_password";
 
-export const VerifyPassword = ({movePassword, id}): JSX.Element => {
+interface PropsVerify {
+  id: number;
+  accessUser: () => void;
+}
 
-  const [pass, setPass] = useState("");
+function VerifyPassword({ accessUser, id }: PropsVerify) {
   const [msg, setMsg] = useState("");
-
+  const refPass = useRef<HTMLInputElement>(null);
 
   const submitFormPass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const pass = refPass.current.value;
     if (pass.length > 15 || pass.length < 8) {
       setMsg("Contraseña debe ser de 8 a 15 caracteres");
       return;
     }
 
-    const verify = await verifyPassword(id, pass); 
-  
-    if(!verify) {
-      setMsg("Contraseña es incorrecta")
-      return; 
-    } 
-    movePassword(verify); 
+    const verify = await verifyPassword(id, pass);
 
+    if (!verify) {
+      setMsg("Contraseña es incorrecta");
+      return;
+    }
+    accessUser();
   };
 
   return (
@@ -35,12 +38,11 @@ export const VerifyPassword = ({movePassword, id}): JSX.Element => {
           Ingresar contraseña
         </label>
         <input
-          type="text"
+          type="password"
           className="input-form-pass"
           id="pass"
           name="pass"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
+          ref={refPass}
           required
         />
         <button type="submit" className="btn-form-pass">
@@ -49,4 +51,6 @@ export const VerifyPassword = ({movePassword, id}): JSX.Element => {
       </form>
     </section>
   );
-};
+}
+
+export default React.memo(VerifyPassword);

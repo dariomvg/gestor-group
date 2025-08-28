@@ -1,46 +1,33 @@
 "use client";
-import "../styles/list-tasks.css";
 import iconDelete from "../assets/icons/delete.svg";
 import iconCloseList from "../assets/icons/closeList.svg";
 import iconAddTask from "../assets/icons/icon-more.svg";
-import { FormEvent, useState } from "react";
-import { PropsCreateTask, PropsListTasks } from "@/types/components";
+import React, { useEffect, useState } from "react";
+import "../styles/list-tasks.css";
+import { CreateTask } from "./CreateTask";
+import { addNewTask, getTasks, removeTask } from "@/libs/lib_tasks";
 
-const CreateTask = ({ setViewCreate, addTask }: PropsCreateTask): JSX.Element => {
-  const [form, setForm] = useState("");
+interface PropsListTasks {
+  open: boolean;
+  handleOpenList: () => void;
+}
 
-  const submitTask = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-    addTask(form);
-    setForm(""); 
-    setViewCreate(false);
-  }
-
-  return (
-    <div className="box-create-task">
-      <button className="close-box-create" onClick={() => setViewCreate(false)}>
-        X
-      </button>
-      <form className="form-task" onSubmit={submitTask}>
-        <input
-          type="text"
-          className="input-form-task"
-          placeholder="Escribe tu tarea"
-          id="task"
-          name="task"
-          value={form}
-          onChange={(e) => setForm(e.target.value)}
-          required
-        />
-        <button type="submit" className="btn-form-task">Añadir</button>
-      </form>
-    </div>
-  );
-};
-
-export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }: PropsListTasks): JSX.Element => {
+function ListTasks({ open, handleOpenList }: PropsListTasks) {
   const [viewCreate, setViewCreate] = useState(false);
   const [viewDelete, setViewDelete] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (newTask: string) => {
+    addNewTask(newTask); // arreglar despues
+  };
+
+  useEffect(() => {
+    const getAllTasks = async () => {
+      const newTasks = await getTasks(); // arreglar despues
+      if (newTasks) setTasks(newTasks);
+    };
+    getAllTasks();
+  }, []);
 
   return (
     <section className={`section-list-tasks ${open ? "openList" : ""}`}>
@@ -52,11 +39,12 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
         alt="close list tasks"
         width={30}
         height={30}
+        loading="lazy"
         className="close-list"
         onClick={handleOpenList}
         title="cerrar lista"
       />
-      {project.tasks.length > 0 ? (
+      {tasks.length > 0 ? (
         <section className="section-tasks">
           <div className="header-tasks">
             <h3 className="title-header-tasks">Tareas pendientes</h3>
@@ -66,6 +54,7 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
                 alt="show add tasks"
                 width={25}
                 height={25}
+                loading="lazy"
                 className="icon-header-tasks"
                 onClick={() => setViewCreate(!viewCreate)}
               />
@@ -74,13 +63,14 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
                 alt="show delete tasks"
                 width={25}
                 height={25}
+                loading="lazy"
                 className="icon-header-tasks"
                 onClick={() => setViewDelete(!viewDelete)}
               />
             </div>
           </div>
           <ul className="list-tasks">
-            {project.tasks.map((item) => (
+            {tasks.map((item) => (
               <li className="task" key={item.id}>
                 <p className="title-task">{item.task}</p>
                 {viewDelete && (
@@ -89,8 +79,9 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
                     alt="delete task"
                     width={20}
                     height={20}
+                    loading="lazy"
                     className="icon-delete"
-                    onClick={() => deleteTask(item.id)}
+                    onClick={() => removeTask(item.id)}
                   />
                 )}
               </li>
@@ -109,4 +100,6 @@ export const ListTasks = ({ open, handleOpenList, project, addTask, deleteTask }
       )}
     </section>
   );
-};
+}
+
+export default React.memo(ListTasks);

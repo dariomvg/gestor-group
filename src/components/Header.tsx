@@ -1,18 +1,11 @@
 "use client";
 import Link from "next/link";
 import "../styles/header.css";
-import { useRouter } from "next/navigation";
-import { useContextProject } from "@/contexts/ContextProject";
+import { login, logout } from "@/libs/lib_auth";
+import { useAuth } from "@/contexts/ContextAuth";
 
-export const Header = (): JSX.Element => {
-  const { logout, user } = useContextProject();
-  const router = useRouter(); 
-
-  const handleLogout = () => {
-    logout(); 
-    router.push("/")
-  }
-
+export const Header = () => {
+  const { user } = useAuth();
   return (
     <header className="header">
       <nav className="navbar">
@@ -26,17 +19,17 @@ export const Header = (): JSX.Element => {
           <Link href="/proyectos" className="link-nav">
             Proyectos
           </Link>
-          {user ? (
+          {user.user_id ? (
             <>
-              <button className="login" onClick={handleLogout}>Cerrar Sesión</button>
-              <p className="title-user">
-                {user} <span className="line"></span>
-              </p>
+              <button className="login" onClick={logout}>
+                Cerrar Sesión
+              </button>
+              <p className="title-user">{user.username}</p>
             </>
           ) : (
-            <Link href="/registrarse" className="login">
-              Registrarse
-            </Link>
+            <button className="login" onClick={login}>
+              Iniciar sesión
+            </button>
           )}
         </div>
       </nav>

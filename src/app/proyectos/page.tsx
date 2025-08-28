@@ -1,11 +1,10 @@
-"use client";
 import Link from "next/link";
 import "./proyectos.css";
 import { CardProject } from "@/components/CardProject";
-import { useHandleProject } from "@/hooks/useHandleProject";
+import { getProjects } from "@/libs/lib_projects";
 
-export default function Proyectos() {
-  const { projects } = useHandleProject();
+export default async function Proyectos() {
+  const projects = await getProjects();
 
   return (
     <section className="page-projects">
