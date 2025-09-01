@@ -1,6 +1,5 @@
 .header {
     width: 80%;
-    border-bottom: 1px solid #eee;
     position: fixed;
     z-index: 999;
     background-color: #050505;
@@ -9,20 +8,13 @@
 
 .navbar {
     width: 100%;
-    padding: 10px; 
+    padding: 10px 0; 
     display: flex; 
     justify-content: space-between;
     align-items: center;
 }
 
-.link-logo {
-    text-decoration: none;
-    font-size: 20px;
-    color: #fff;
-    font-weight: bold;
-}
-
-.links {
+.container-navbar {
     display: flex; 
     justify-content: center;
     align-items: center;
@@ -33,11 +25,17 @@
     color: #aaa; 
     font-size: 16px;
     text-decoration: none;
+    font-weight: 500;
+    transition: color .5s ease-in-out;
 
 }
 
 .link-nav:hover {
     color: #fff; 
+}
+
+.link-github {
+    text-decoration: none;
 }
 
 .login {
@@ -46,16 +44,16 @@
     text-decoration: none;
     border: 1px solid #eee;
     border-radius: 5px;
-    padding: 5px;
-    transition: .5s;
+    padding:10px;
+    transition: .5s ease-in-out;
     background-color: transparent;
     cursor: pointer;
     font-weight: 500;
 }
+
 .login:hover {
     background-color: #eee;
     color: #000;
-    transition: .5s;
 }
 
 .title-user {

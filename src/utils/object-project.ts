@@ -4,7 +4,7 @@ export const objBase: ObjBaseType = {
     title: "",
     description: "",
     start_date: "",
-    last_date: "",
+    end_date: "",
     creator: "",
     content: "",
     password: "",

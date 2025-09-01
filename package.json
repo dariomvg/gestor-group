@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
+    "format-all-dates": "^2.0.0",
     "next": "14.2.12",
     "react": "^18",
     "react-dom": "^18",

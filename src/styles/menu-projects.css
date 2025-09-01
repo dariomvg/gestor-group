@@ -1,7 +1,7 @@
 .nav-projects {
     width: 200px;
     height: 100vh;
-    padding: 10px;
+    padding: 5px;
     border-right: 1px solid #eee;
 }
 
@@ -21,17 +21,22 @@
     gap: 14px;
 }
 
-.link-nav-project {
+.link-menu-project {
     width: 100%;
-    border: 1px solid #fff;
+    border: 1px solid #aaa;
     padding: 5px;
     color: #fff;
     text-decoration: none;
+    border-radius: 5px;
+    transition: .5s ease-in-out;
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.link-nav-project:hover {
-    border-color:#ffffff8f ;
-    color: #ffffff8f;
+.link-menu-project:hover {
+    border-color:#fff;
+    background-color: #fff;
+    color: #101010;
 }
 
 

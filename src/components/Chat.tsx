@@ -1,33 +1,44 @@
 "use client";
-import { addNewMessage, getAllMessages } from "@/libs/lib_chat";
+import { addNewMessage, getMessages } from "@/libs/lib_chat";
 import "../styles/chat.css";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { getLocalHour, getShortDate } from "format-all-dates";
 
-function Chat({ open }: { open: boolean }) {
+function Chat({
+  open,
+  username,
+  project_id,
+}: {
+  open: boolean;
+  username: string;
+  project_id: number;
+}) {
   const refInput = useRef<HTMLInputElement>(null);
   const [messages, setMessages] = useState([]);
 
   const submitFormChat = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!refInput.current.value) return;
-    addNewMessage(refInput.current.value, 18, "dariomvg"); // cambiar despues
+    const newMsg = refInput.current.value;
+    if (!newMsg) return;
+    const date_msg = `${getShortDate()} - ${getLocalHour()}Hs`;
+    addNewMessage({ username, message: newMsg, date_msg, project_id });
     refInput.current.value = "";
   };
 
   useEffect(() => {
-    const getMessages = async () => {
-      const newMessages = await getAllMessages(1);
-      if (newMessages.length > 0) setMessages(newMessages); // cambiar despues
+    const getAllMessages = async () => {
+      const newMessages = await getMessages(project_id);
+      if (newMessages.length > 0) setMessages(newMessages);
     };
-    getMessages();
+    getAllMessages();
   }, [messages]);
 
   return (
     <div className={`box-chat ${open ? "open" : ""}`}>
       <ul className="chat">
         {messages.length > 0 &&
-          messages.map((item, index) => (
-            <li className="message" key={index}>
+          messages.map((item) => (
+            <li className="message" key={item.id}>
               <b className="user-chat">{item.username}</b>
               {item.message}
             </li>

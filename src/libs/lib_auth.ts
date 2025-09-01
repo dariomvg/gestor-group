@@ -1,32 +1,27 @@
 import { supabase } from "@/supabase/supabase";
 
-
-export const getSession = async (user: string) => {
-  let { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("user", user);
-
-  return data[0];
+export const getSession = async () => {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return session;
 };
 
-
 export const logout = async () => {
-  const { error } = await supabase.from("users").delete().eq("user", "cambiar despues");
-  if (error) return console.log(error);
+  let { error } = await supabase.auth.signOut();
+  if (error) {
+    console.log(error);
+    throw new Error("Error LogOut of Google in the Application");
+  }
 };
 
 export const login = async () => {
-  const foundUser = await getSession("dario");
-  if (foundUser) {
-    return "";
+  let { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+  if (error) {
+    console.log(error);
+    throw new Error("Error Login with Google");
   }
-  const { data, error } = await supabase
-    .from("users")
-    .insert([{ user: "cambiar despues" }])
-    .select();
-
-  if (error) return console.log(error);
-  console.log("data: ", data);
-  return data[0].user;
+  console.log(data);
 };

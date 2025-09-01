@@ -3,6 +3,19 @@
     height: 100vh;
 }
 
+.link-projects {
+    text-decoration: none;
+    font-size: 16px;
+    color: #aaa; 
+    font-weight: 500;
+    transition: .5s ease-in-out;
+    padding: 10px;
+}
+
+.link-projects:hover {
+    color: #fff; 
+}
+
 .section-create {
     width: 100%;
     height: 100vh;

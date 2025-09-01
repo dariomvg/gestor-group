@@ -3,7 +3,7 @@ import "../styles/menu-projects.css";
 
 export const LinkProject = ({ id, title }: { id: number; title: string }) => {
   return (
-    <Link href={`/proyectos/${id}`} className="link-nav-project">
+    <Link href={`/proyectos/${id}`} className="link-menu-project">
       {title}
     </Link>
   );

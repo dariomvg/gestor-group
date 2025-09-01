@@ -1,12 +1,16 @@
 import { supabase } from "@/supabase/supabase";
 
-export const saveContentEditor = async (content: string, id: number) => {
+export const saveContentEditor = async (
+  newContent: string,
+  idProject: number
+) => {
   const { data, error } = await supabase
     .from("projects")
-    .update({ content })
-    .eq("id", id)
+    .update({ content: newContent })
+    .eq("id", idProject)
     .select();
-  if (error) return console.log(error);
+  if (error) {
+    console.log(error);
+    throw new Error("Error Removing projects");
+  }
 };
-
-

@@ -7,6 +7,7 @@ export interface ObjBaseType {
   creator: string;
   content: string;
   password: string;
+  user_id?: string
 }
 
 export interface TaskType {
@@ -27,8 +28,11 @@ export interface ContextAuthTypes {
   user: ObjUser
 }
 
-export interface Colaborator {
-  name: string
+export interface Collaborator {
+  username: string; 
+  user_id: number; 
+  id?: number; 
+  project_id?: number; 
 }
 
 export interface CustomControls {

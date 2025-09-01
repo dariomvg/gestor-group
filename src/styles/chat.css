@@ -16,13 +16,10 @@
     gap: 10px;
     box-shadow: 0 0 2px #aaa;
     transform: translateX(500px);
-    transition: .5s;
-
+    transition: .5s ease-in-out;
 }
 .box-chat.open {
     transform: translateX(0);
-    transition: .5s;
-
 }
 
 .chat {
@@ -71,7 +68,7 @@ color: #000;
     background-color: transparent;
 }
 .input-chat:focus {
-    border-color: #5f9ea0;
+    border-color: #15f3eb;
 }
 
 .input-chat::placeholder {
@@ -83,10 +80,10 @@ color: #000;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    background-color: #275556; 
+    background-color: #15f3eb; 
     border: none;
     border-radius: 5px;
-    color: #fff; 
+    color: #101010; 
 }
 
 

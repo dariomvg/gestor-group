@@ -1,24 +1,24 @@
-import { Colaborator } from "@/types/global";
+import { Collaborator } from "@/types/global";
 import iconDelete from "../assets/icons/deleteColaborate.svg";
 import { deleteColaborate } from "@/libs/lib_colaborators";
 
 interface PropsListColaborators {
-  colaborators: Colaborator[];
+  collaborators: Collaborator[];
   actualUser: string;
   creator: string;
 }
 
-export const ListColaborators = ({
-  colaborators,
+export const ListCollaborators = ({
+  collaborators,
   actualUser,
   creator,
 }: PropsListColaborators) => {
   return (
     <ul className="list-colaborates">
-      {colaborators.length > 0 &&
-        colaborators.map((user, index) => (
-          <li className="colaborate" key={index}>
-            {user.name}
+      {collaborators.length > 0 &&
+        collaborators.map((user) => (
+          <li className="colaborate" key={user.id}>
+            {user.username}
             {actualUser === creator ? (
               <img
                 src={iconDelete.src}
@@ -28,7 +28,7 @@ export const ListColaborators = ({
                 loading="lazy"
                 className="delete-colaborate"
                 title="eliminar colaborador"
-                onClick={() => deleteColaborate(user.name)}
+                onClick={() => deleteColaborate(user.id)}
               />
             ) : null}
           </li>

@@ -46,7 +46,7 @@ export default function Nuevo({ params }: {params: {id: string}}) {
     if (form.id) {
       updateProject(form);
     } else {
-      addNewProject({ ...form, creator: user.username });
+      addNewProject({ ...form, creator: user.username, user_id: user.user_id });
     }
 
     setForm(objBase);

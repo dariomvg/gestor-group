@@ -6,10 +6,11 @@ import iconCopy from "../assets/icons/copy.svg";
 import React, { useEffect, useState } from "react";
 import { ObjBaseType } from "@/types/global";
 import { useAuth } from "@/contexts/ContextAuth";
-import { updateNewPassword } from "@/libs/lib_password";
-import { getAllColaborates } from "@/libs/lib_colaborators";
-import { ListColaborators } from "./ListColaborators";
+import { updatePassword } from "@/libs/lib_password";
+import { getCollaborators } from "@/libs/lib_colaborators";
+import { ListCollaborators } from "./ListCollaborators";
 import { hidden_password } from "@/utils/password-hidden";
+import crypto from "crypto"; 
 
 interface PropsModal {
   open: boolean;
@@ -18,14 +19,14 @@ interface PropsModal {
 }
 
 function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
-  const [colaborators, setColaborators] = useState([]);
+  const [collaborators, setCollaborators] = useState([]);
   const [viewPass, setViewPass] = useState(false);
   const [msg, setMsg] = useState("");
   const { user } = useAuth();
 
   const changePassword = () => {
-    const newPassword = "Colocar crypto UUID, para a contraseña";
-    updateNewPassword(newPassword, project.id);
+    const newPassword = crypto.randomBytes(8).toString("hex");
+    updatePassword(newPassword, project.id);
   };
 
   const copyPassword = () => {
@@ -34,11 +35,11 @@ function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
   };
 
   useEffect(() => {
-    const getColaborators = async () => {
-      const newColaborators = await getAllColaborates(project.id);
-      if (newColaborators.length > 0) setColaborators(newColaborators);
+    const getAllCollaborators = async () => {
+      const newColaborators = await getCollaborators(project.id);
+      if (newColaborators.length > 0) setCollaborators(newColaborators);
     };
-    getColaborators();
+    getAllCollaborators();
   }, []);
 
   return (
@@ -95,8 +96,8 @@ function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
           </div>
         </div>
       </div>
-      <ListColaborators
-        colaborators={colaborators}
+      <ListCollaborators
+        collaborators={collaborators}
         actualUser={user.username}
         creator={project.creator}
       />

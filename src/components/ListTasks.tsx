@@ -1,7 +1,6 @@
 "use client";
 import iconDelete from "../assets/icons/delete.svg";
 import iconCloseList from "../assets/icons/closeList.svg";
-import iconAddTask from "../assets/icons/icon-more.svg";
 import React, { useEffect, useState } from "react";
 import "../styles/list-tasks.css";
 import { CreateTask } from "./CreateTask";
@@ -10,30 +9,31 @@ import { addNewTask, getTasks, removeTask } from "@/libs/lib_tasks";
 interface PropsListTasks {
   open: boolean;
   handleOpenList: () => void;
+  id: number;
 }
 
-function ListTasks({ open, handleOpenList }: PropsListTasks) {
-  const [viewCreate, setViewCreate] = useState(false);
-  const [viewDelete, setViewDelete] = useState(false);
+function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
   const [tasks, setTasks] = useState([]);
 
-  const addTask = (newTask: string) => {
-    addNewTask(newTask); // arreglar despues
+  const addTask = async (newTask: string) => {
+    const data = await addNewTask({
+      task: newTask,
+      project_id: id,
+      completed: false,
+    });
+    if (data.length > 0) setTasks([...tasks, data[0]]);
   };
 
   useEffect(() => {
     const getAllTasks = async () => {
-      const newTasks = await getTasks(); // arreglar despues
-      if (newTasks) setTasks(newTasks);
+      const newTasks = await getTasks();
+      if (newTasks.length > 0) setTasks(newTasks);
     };
     getAllTasks();
   }, []);
 
   return (
     <section className={`section-list-tasks ${open ? "openList" : ""}`}>
-      <div className={`sec-create-task ${viewCreate ? "openCreate" : ""}`}>
-        <CreateTask setViewCreate={setViewCreate} addTask={addTask} />
-      </div>
       <img
         src={iconCloseList.src}
         alt="close list tasks"
@@ -44,46 +44,25 @@ function ListTasks({ open, handleOpenList }: PropsListTasks) {
         onClick={handleOpenList}
         title="cerrar lista"
       />
+      <div className={`sec-create-task`}>
+        <CreateTask addTask={addTask} />
+      </div>
       {tasks.length > 0 ? (
         <section className="section-tasks">
-          <div className="header-tasks">
-            <h3 className="title-header-tasks">Tareas pendientes</h3>
-            <div className="btns-header-tasks">
-              <img
-                src={iconAddTask.src}
-                alt="show add tasks"
-                width={25}
-                height={25}
-                loading="lazy"
-                className="icon-header-tasks"
-                onClick={() => setViewCreate(!viewCreate)}
-              />
-              <img
-                src={iconDelete.src}
-                alt="show delete tasks"
-                width={25}
-                height={25}
-                loading="lazy"
-                className="icon-header-tasks"
-                onClick={() => setViewDelete(!viewDelete)}
-              />
-            </div>
-          </div>
+          <h3 className="title-header-tasks">Tareas pendientes</h3>
           <ul className="list-tasks">
             {tasks.map((item) => (
               <li className="task" key={item.id}>
                 <p className="title-task">{item.task}</p>
-                {viewDelete && (
-                  <img
-                    src={iconDelete.src}
-                    alt="delete task"
-                    width={20}
-                    height={20}
-                    loading="lazy"
-                    className="icon-delete"
-                    onClick={() => removeTask(item.id)}
-                  />
-                )}
+                <img
+                  src={iconDelete.src}
+                  alt="delete task"
+                  width={20}
+                  height={20}
+                  loading="lazy"
+                  className="icon-delete"
+                  onClick={() => removeTask(item.id)}
+                />
               </li>
             ))}
           </ul>
@@ -91,11 +70,6 @@ function ListTasks({ open, handleOpenList }: PropsListTasks) {
       ) : (
         <div className="section-create-task">
           <p className="title-create-task">No tienes tareas pendientes</p>
-          <button
-            className="btn-create-task"
-            onClick={() => setViewCreate(!viewCreate)}>
-            Crear
-          </button>
         </div>
       )}
     </section>

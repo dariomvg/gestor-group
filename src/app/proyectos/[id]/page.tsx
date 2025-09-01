@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import MenuProjects from "@/components/MenuProjects";
 import ControlsProject from "@/components/ControlsProject";
 
-const objDynamic = {ssr: false, loading: () => <Loader />};
+const objDynamic = { ssr: false, loading: () => <Loader /> };
 
 const Chat = dynamic(() => import("@/components/Chat"), objDynamic);
 const ListTasks = dynamic(() => import("@/components/ListTasks"), objDynamic);
@@ -48,9 +48,13 @@ export default function Project({ params }: { params: { id: string } }) {
   const [valueText, setValueText] = useState<string>("");
 
   const accessUser = async () => {
-    const colaborate = await getColaborate(user.user_id);
+    const colaborate = await getColaborate(parseInt(user.user_id));
     if (!colaborate) {
-      addColaborate(project.id, user.user_id);
+      addColaborate({
+        username: user.username,
+        project_id: project.id,
+        user_id: user.user_id,
+      });
     }
     setVerify(true);
   };
@@ -68,11 +72,11 @@ export default function Project({ params }: { params: { id: string } }) {
       };
       getUniqueProject();
     }
-  }, [id]);  
+  }, [id]);
 
   return (
     <section className="wrapper-project">
-      {user.user_id === project.creator || verify ? (
+      {user?.username === project.creator || verify ? (
         <section className="project">
           <MenuProjects />
           <section className="section-project">
@@ -85,6 +89,7 @@ export default function Project({ params }: { params: { id: string } }) {
                   loading="lazy"
                   width={25}
                   height={25}
+                  title={`Eliminar ${project.title}`}
                   onClick={() => {
                     removeProject(project.id);
                     router.push("/proyectos");
@@ -110,8 +115,16 @@ export default function Project({ params }: { params: { id: string } }) {
               />
             </section>
           </section>
-          <Chat open={openChat} />
-          <ListTasks open={openList} handleOpenList={handleOpenList} />
+          <Chat
+            open={openChat}
+            username={user.username}
+            project_id={project.id}
+          />
+          <ListTasks
+            open={openList}
+            handleOpenList={handleOpenList}
+            id={project.id}
+          />
           <ModalPassword
             open={openAdduser}
             handleOpenModal={handleOpenModal}
@@ -119,7 +132,7 @@ export default function Project({ params }: { params: { id: string } }) {
           />
         </section>
       ) : (
-        <VerifyPassword accessUser={accessUser} id={project.id} />
+        <VerifyPassword accessUser={accessUser} />
       )}
     </section>
   );

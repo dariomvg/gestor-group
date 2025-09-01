@@ -1,26 +1,31 @@
 import { supabase } from "@/supabase/supabase";
-import { getProject } from "./lib_projects";
 
-
-export const updateNewPassword = async (pass: string, id: number) => {
+export const updatePassword = async (
+  newPassword: string,
+  idProject: number
+) => {
   const { data, error } = await supabase
     .from("projects")
-    .update({ password: pass })
-    .eq("id", id)
+    .update({ password: newPassword })
+    .eq("id", idProject)
     .select();
-  if (error) return console.log(error);
+  if (error) {
+    console.log(error);
+    throw new Error("Error update password");
+  }
+  console.log(data);
 };
 
-// todo colaborates
+export const verifyCorrectPassword = async (password: string) => {
+  let { data, error } = await supabase
+    .from("projects")
+    .select("password")
+    .eq("password", password);
 
-
-
-// todo verify password project
-
-export const verifyPassword = async (id: number, pass: string) => {
-  const project = await getProject(id);
-  if (project[0].password === pass) {
-    return true;
+  if (error) {
+    console.log(error);
+    throw new Error("Error Verify Password");
   }
-  return false;
+
+  return data ? true : false;
 };

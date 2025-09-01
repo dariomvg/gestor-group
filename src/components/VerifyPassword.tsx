@@ -1,14 +1,13 @@
 "use client";
 import React, { FormEvent, useRef, useState } from "react";
 import "../styles/verify-pass.css";
-import { verifyPassword } from "@/libs/lib_password";
+import { verifyCorrectPassword } from "@/libs/lib_password";
 
 interface PropsVerify {
-  id: number;
   accessUser: () => void;
 }
 
-function VerifyPassword({ accessUser, id }: PropsVerify) {
+function VerifyPassword({ accessUser }: PropsVerify) {
   const [msg, setMsg] = useState("");
   const refPass = useRef<HTMLInputElement>(null);
 
@@ -20,7 +19,7 @@ function VerifyPassword({ accessUser, id }: PropsVerify) {
       return;
     }
 
-    const verify = await verifyPassword(id, pass);
+    const verify = await verifyCorrectPassword(pass);
 
     if (!verify) {
       setMsg("Contraseña es incorrecta");

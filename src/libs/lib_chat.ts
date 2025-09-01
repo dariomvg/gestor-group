@@ -1,17 +1,43 @@
 import { supabase } from "@/supabase/supabase";
 
-
-export const addNewMessage = async (msg: string, id: number, user: string) => {
+export const addNewMessage = async (newMsg: {
+  username: string;
+  project_id: number;
+  date_msg: string;
+  message: string;
+}) => {
   const { data, error } = await supabase
-    .from("chat")
-    .insert([{ project_id: id, message: msg, username: user }])
+    .from("messages")
+    .insert([newMsg])
     .select();
-  return data[0];
+  if (error) {
+    console.log(error);
+    throw new Error("Error Adding message");
+  }
+  console.log(data);
 };
 
-export const getAllMessages = async (id: number) => {
-  let { data, error } = await supabase.from("chat").select("username, message");
-
-  if (error) console.log(error);
+export const getMessages = async (id: number) => {
+  const { data, error } = await supabase
+    .from("messages")
+    .select("*")
+    .eq("project_id", id);
+  if (error) {
+    console.log(error);
+    throw new Error("Error Getting task");
+  }
   return data;
+};
+
+export const deleteMessage = async (idMessage: number) => {
+  const { data, error } = await supabase
+    .from("messages")
+    .delete()
+    .eq("id", idMessage)
+    .select();
+  if (error) {
+    console.log(error);
+    throw new Error("Error Removing message");
+  }
+  console.log(data);
 };
