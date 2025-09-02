@@ -1,10 +1,17 @@
 "use client";
 import iconDelete from "../assets/icons/delete.svg";
 import iconCloseList from "../assets/icons/closeList.svg";
+import iconCheckTask from "../assets/icons/check-task.svg";
 import React, { useEffect, useState } from "react";
 import "../styles/list-tasks.css";
 import { CreateTask } from "./CreateTask";
-import { addNewTask, getTasks, removeTask } from "@/libs/lib_tasks";
+import {
+  addNewTask,
+  completeTask,
+  getTasks,
+  removeTask,
+} from "@/libs/lib_tasks";
+import { supabase } from "@/supabase/supabase";
 
 interface PropsListTasks {
   open: boolean;
@@ -15,22 +22,58 @@ interface PropsListTasks {
 function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
   const [tasks, setTasks] = useState([]);
 
+  const getAllTasks = async () => {
+    const newTasks = await getTasks(id);
+    if (newTasks.length > 0) setTasks(newTasks);
+  };
+
   const addTask = async (newTask: string) => {
-    const data = await addNewTask({
+    addNewTask({
       task: newTask,
       project_id: id,
       completed: false,
     });
-    if (data.length > 0) setTasks([...tasks, data[0]]);
   };
 
   useEffect(() => {
-    const getAllTasks = async () => {
-      const newTasks = await getTasks();
-      if (newTasks.length > 0) setTasks(newTasks);
-    };
     getAllTasks();
-  }, []);
+
+    const channel = supabase
+      .channel("custom-all-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "tasks",
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            setTasks((prevTasks) => [...prevTasks, payload.new]);
+          }
+          if (payload.eventType === "DELETE") {
+            setTasks((prevTasks) =>
+              prevTasks.filter((task) => task.id !== payload.old.id)
+            );
+          }
+          if (payload.eventType === "UPDATE") {
+            const newTask = payload.new;
+            setTasks((prevTasks) =>
+              prevTasks.map((task) =>
+                task.id == newTask.id
+                  ? { ...task, completed: newTask.completed }
+                  : task
+              )
+            );
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id]);
 
   return (
     <section className={`section-list-tasks ${open ? "openList" : ""}`}>
@@ -52,17 +95,33 @@ function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
           <h3 className="title-header-tasks">Tareas pendientes</h3>
           <ul className="list-tasks">
             {tasks.map((item) => (
-              <li className="task" key={item.id}>
+              <li
+                className={`task ${item.completed ? "completed-task" : ""}`}
+                key={item.id}>
                 <p className="title-task">{item.task}</p>
-                <img
-                  src={iconDelete.src}
-                  alt="delete task"
-                  width={20}
-                  height={20}
-                  loading="lazy"
-                  className="icon-delete"
-                  onClick={() => removeTask(item.id)}
-                />
+
+                <div className="container-controls-task">
+                  <img
+                    src={iconCheckTask.src}
+                    alt="check task"
+                    title="Completada"
+                    width={20}
+                    height={20}
+                    loading="lazy"
+                    className="icon-controls-task"
+                    onClick={() => completeTask(!item.completed, item.id)}
+                  />
+                  <img
+                    src={iconDelete.src}
+                    alt="delete task"
+                    title="Eliminar"
+                    width={20}
+                    height={20}
+                    loading="lazy"
+                    className="icon-controls-task"
+                    onClick={() => removeTask(item.id)}
+                  />
+                </div>
               </li>
             ))}
           </ul>

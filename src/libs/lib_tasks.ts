@@ -1,7 +1,10 @@
 import { supabase } from "@/supabase/supabase";
 
-export const getTasks = async () => {
-  const { data, error } = await supabase.from("tasks").select("*");
+export const getTasks = async (projectId: number) => {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("project_id", projectId);
   if (error) {
     console.log(error);
     throw new Error("Error Getting tasks");
@@ -22,14 +25,22 @@ export const addNewTask = async (newTask: {
   project_id: number;
   completed: boolean;
 }) => {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("tasks")
     .insert([newTask])
-    .select();
   if (error) {
     console.log(error);
     throw new Error("Error Adding task");
   }
-  console.log(data);
-  return data;
+};
+
+export const completeTask = async (value: boolean, idTask: number) => {
+  const { error } = await supabase
+    .from("tasks")
+    .update({ completed: value })
+    .eq("id", idTask)
+  if (error) {
+    console.log(error);
+    throw new Error("Error Adding task");
+  }
 };

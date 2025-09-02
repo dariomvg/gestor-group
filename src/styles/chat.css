@@ -2,7 +2,7 @@
     width: 400px;
     height: 350px;
     overflow-y: auto;
-    background-color: #ddd;
+    background-color: #181818;
     border-radius: 5px;
     position: absolute;
     z-index: 1;
@@ -14,7 +14,7 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 10px;
-    box-shadow: 0 0 2px #aaa;
+    box-shadow: 0 0 2px #252525;
     transform: translateX(500px);
     transition: .5s ease-in-out;
 }
@@ -23,24 +23,21 @@
 }
 
 .chat {
+    width: 100%; 
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.user-chat {
-color: #000;
-}
-
 .message {
-    width: 200px;
+    width: 100%;
     height: auto;
     overflow-x: auto;
     color: #101010;
     list-style: none;
     padding: 5px;
     border-radius: 5px;
-    background-color: #5f9ea0;
+    background-color: #303030;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -49,6 +46,32 @@ color: #000;
 
 }
 
+.container-message {
+    width: 100%; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+.username-message {
+    color: #fff; 
+}
+.date-message {
+    color: #fff; 
+}
+.content-message {
+    color: #ddd; 
+    font-size: 16px;
+}
+
+.container-delete-message {
+    display: flex;
+    align-item: center;
+    justify-content: center; 
+    gap: 8px;
+}
+.icon-delete-msg {
+    cursor: pointer; 
+}
 .controls-chat {
     width: 100%;
     display: flex;
@@ -61,10 +84,10 @@ color: #000;
     padding: 8px;
     font-size: 16px;
     width: 100%;
-    color: #000;
+    color: #fff;
     outline: none;
     border-radius: 5px;
-    border: 1px solid #101010;
+    border: 1px solid #fff;
     background-color: transparent;
 }
 .input-chat:focus {
@@ -72,7 +95,7 @@ color: #000;
 }
 
 .input-chat::placeholder {
-    color: #101010;
+    color: #ddd;
 }
 
 .btn-chat {
