@@ -23,5 +23,4 @@ export const login = async () => {
     console.log(error);
     throw new Error("Error Login with Google");
   }
-  console.log(data);
 };

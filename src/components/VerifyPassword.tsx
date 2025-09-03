@@ -14,8 +14,8 @@ function VerifyPassword({ accessUser }: PropsVerify) {
   const submitFormPass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const pass = refPass.current.value;
-    if (pass.length > 15 || pass.length < 8) {
-      setMsg("Contraseña debe ser de 8 a 15 caracteres");
+    if (pass.length > 20 || pass.length < 8) {
+      setMsg("Contraseña debe ser de 8 a 20 caracteres");
       return;
     }
 
@@ -25,6 +25,7 @@ function VerifyPassword({ accessUser }: PropsVerify) {
       setMsg("Contraseña es incorrecta");
       return;
     }
+
     accessUser();
   };
 

@@ -1,6 +1,6 @@
 import { supabase } from "@/supabase/supabase";
 
-export const getColaborate = async (idColaborator: number) => {
+export const getColaborate = async (idColaborator: string) => {
   let { data, error } = await supabase
     .from("colaborators")
     .select("*")

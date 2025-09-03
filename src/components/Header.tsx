@@ -4,9 +4,12 @@ import "../styles/header.css";
 import { login, logout } from "@/libs/lib_auth";
 import { useAuth } from "@/contexts/ContextAuth";
 import iconGithub from "../assets/icons/github.svg";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
   const { user } = useAuth();
+  const router = useRouter();
+
   return (
     <header className="header">
       <nav className="navbar">
@@ -27,7 +30,12 @@ export const Header = () => {
                 height={30}
               />
               <p className="title-user">{user.username}</p>
-              <button className="login" onClick={logout}>
+              <button
+                className="login"
+                onClick={() => {
+                  logout();
+                  router.push("/registrarse");
+                }}>
                 Cerrar Sesión
               </button>
             </>

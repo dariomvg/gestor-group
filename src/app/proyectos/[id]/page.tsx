@@ -48,7 +48,7 @@ export default function Project({ params }: { params: { id: string } }) {
   const [valueText, setValueText] = useState<string>("");
 
   const accessUser = async () => {
-    const colaborate = await getColaborate(parseInt(user.user_id));
+    const colaborate = await getColaborate(user.user_id);
     if (!colaborate) {
       addColaborate({
         username: user.username,
@@ -67,8 +67,9 @@ export default function Project({ params }: { params: { id: string } }) {
     if (id) {
       const getUniqueProject = async () => {
         const foundProject = await getProject(parseInt(id));
+
         setProject(foundProject[0]);
-        setValueText(foundProject[0].content);
+        setValueText(foundProject[0].content);   
       };
       getUniqueProject();
     }
@@ -76,7 +77,7 @@ export default function Project({ params }: { params: { id: string } }) {
 
   return (
     <section className="wrapper-project">
-      {user?.username === project.creator || verify ? (
+      {user?.user_id === project.creator || verify ? (
         <section className="project">
           <MenuProjects />
           <section className="section-project">

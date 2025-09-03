@@ -8,18 +8,19 @@ export const updatePassword = async (
     .from("projects")
     .update({ password: newPassword })
     .eq("id", idProject)
-    .select();
+    .select("password");
   if (error) {
     console.log(error);
     throw new Error("Error update password");
   }
   console.log(data);
+  return data[0].password;
 };
 
 export const verifyCorrectPassword = async (password: string) => {
   let { data, error } = await supabase
     .from("projects")
-    .select("password")
+    .select("*")
     .eq("password", password);
 
   if (error) {
@@ -27,5 +28,5 @@ export const verifyCorrectPassword = async (password: string) => {
     throw new Error("Error Verify Password");
   }
 
-  return data ? true : false;
+  return data.length > 0 ? true : false;
 };

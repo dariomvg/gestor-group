@@ -18,8 +18,8 @@ export default function Proyectos() {
 
   return (
     <section className="page-projects">
-      {projects.length > 0 ? (
-        <>
+      {projects.length > 0 ? (                        
+        <> 
         <Link href="/" className="link-projects">Volver</Link>
         <section className="section-projects">
           {projects.map((item) => (

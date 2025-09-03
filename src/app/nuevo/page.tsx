@@ -34,8 +34,8 @@ export default function Nuevo({ params }: {params: {id: string}}) {
     e.preventDefault();
     const titleProject = form.password.length;
     const passwordProject = form.password.length;
-    if (passwordProject > 15 || passwordProject < 8) {
-      setMsg("Contraseña debe ser de 8 a 15 caracteres");
+    if (passwordProject > 20 || passwordProject < 8) {
+      setMsg("Contraseña debe ser de 8 a 20 caracteres");
       return;
     }
     if (titleProject > 15) {
@@ -46,7 +46,7 @@ export default function Nuevo({ params }: {params: {id: string}}) {
     if (form.id) {
       updateProject(form);
     } else {
-      addNewProject({ ...form, creator: user.username, user_id: user.user_id });
+      addNewProject({ ...form, creator: user.user_id, user_id: user.user_id });
     }
 
     setForm(objBase);
