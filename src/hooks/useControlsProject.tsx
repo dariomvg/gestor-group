@@ -1,5 +1,5 @@
 "use client";
-import { CustomControls } from "@/types/components";
+import { CustomControls } from "@/types/global";
 import { useState } from "react";
 
 export const useControlsProject = (): CustomControls => {
