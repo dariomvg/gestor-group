@@ -51,7 +51,7 @@ function Chat({
             );
           }
         }
-      );
+      ).subscribe();
 
     return () => {
       supabase.removeChannel(channel);
