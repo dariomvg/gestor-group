@@ -41,7 +41,7 @@ function Chat({
         "postgres_changes",
         { event: "*", schema: "public", table: "messages" },
         (payload) => {
-          console.log(payload)
+          console.log("payload: ",payload)
           if (payload.eventType === "INSERT") {
             setMessages((prevMessages) => [...prevMessages, payload.new]);
           }
