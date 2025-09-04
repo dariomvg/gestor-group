@@ -24,7 +24,6 @@ import { useEffect, useState } from "react";
 import { ObjBaseType } from "@/types/global";
 import { objBase } from "@/utils/object-project";
 import { useAuth } from "@/contexts/ContextAuth";
-import { addColaborate, getColaborate } from "@/libs/lib_colaborators";
 import { saveContentEditor } from "@/libs/lib_content";
 import { getProject, removeProject } from "@/libs/lib_projects";
 import "react-quill/dist/quill.snow.css";
@@ -48,14 +47,6 @@ export default function Project({ params }: { params: { id: string } }) {
   const [valueText, setValueText] = useState<string>("");
 
   const accessUser = async () => {
-    const colaborate = await getColaborate(user.user_id);
-    if (!colaborate) {
-      addColaborate({
-        username: user.username,
-        project_id: project.id,
-        user_id: user.user_id,
-      });
-    }
     setVerify(true);
   };
 
@@ -69,7 +60,7 @@ export default function Project({ params }: { params: { id: string } }) {
         const foundProject = await getProject(parseInt(id));
 
         setProject(foundProject[0]);
-        setValueText(foundProject[0].content);   
+        setValueText(foundProject[0].content);
       };
       getUniqueProject();
     }

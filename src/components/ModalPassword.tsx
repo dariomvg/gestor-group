@@ -3,15 +3,11 @@ import "../styles/modal-password.css";
 import iconView from "../assets/icons/view.svg";
 import iconHidden from "../assets/icons/hidden.svg";
 import iconCopy from "../assets/icons/copy.svg";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ObjBaseType } from "@/types/global";
-import { useAuth } from "@/contexts/ContextAuth";
 import { updatePassword } from "@/libs/lib_password";
-import { getCollaborators } from "@/libs/lib_colaborators";
-import { ListCollaborators } from "./ListCollaborators";
 import { hidden_password } from "@/utils/password-hidden";
 import crypto from "crypto";
-import { supabase } from "@/supabase/supabase";
 
 interface PropsModal {
   open: boolean;
@@ -20,11 +16,9 @@ interface PropsModal {
 }
 
 function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
-  const [collaborators, setCollaborators] = useState([]);
   const [viewPass, setViewPass] = useState(false);
   const [password, setPassword] = useState<string>(project.password);
   const [msg, setMsg] = useState("");
-  const { user } = useAuth();
 
   const changePassword = async () => {
     const newPassword = crypto.randomBytes(8).toString("hex");
@@ -36,40 +30,6 @@ function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
     navigator.clipboard.writeText(project.password);
     setMsg("Copiado");
   };
-  const getAllCollaborators = async () => {
-    const newColaborators = await getCollaborators(project.id);
-    if (newColaborators.length > 0) setCollaborators(newColaborators);
-  };
-
-  useEffect(() => {
-    getAllCollaborators();
-
-    const channel = supabase
-      .channel("custom-all-channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "colaborators",
-        },
-        (payload) => {
-          if (payload.eventType === "INSERT") {
-            setCollaborators((prev) => [...prev, payload.new]);
-          }
-          if (payload.eventType === "DELETE") {
-            setCollaborators((prev) =>
-              prev.filter((col) => col.id !== payload.old.id)
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [project.id]);
 
   return (
     <section className={`modal-password ${open ? "openModal" : ""}`}>
@@ -123,11 +83,6 @@ function ModalPassword({ open, handleOpenModal, project }: PropsModal) {
           </div>
         </div>
       </div>
-      <ListCollaborators
-        collaborators={collaborators}
-        actualUser={user.user_id}
-        creator={project.creator}
-      />
     </section>
   );
 }

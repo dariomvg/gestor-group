@@ -13,11 +13,13 @@ export const getTasks = async (projectId: number) => {
 };
 
 export const removeTask = async (idTask: number) => {
-  const { error } = await supabase.from("tasks").delete().eq("id", idTask);
+  const { data, error } = await supabase.from("tasks").delete().eq("id", idTask).select();
   if (error) {
     console.log(error);
     throw new Error("Error Removing task");
   }
+
+  return data[0];
 };
 
 export const addNewTask = async (newTask: {
@@ -25,22 +27,28 @@ export const addNewTask = async (newTask: {
   project_id: number;
   completed: boolean;
 }) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("tasks")
     .insert([newTask])
+    .select();
   if (error) {
     console.log(error);
     throw new Error("Error Adding task");
   }
+
+  return data[0];
 };
 
 export const completeTask = async (value: boolean, idTask: number) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("tasks")
     .update({ completed: value })
     .eq("id", idTask)
+    .select()
   if (error) {
     console.log(error);
     throw new Error("Error Adding task");
   }
+
+  return data[0];
 };

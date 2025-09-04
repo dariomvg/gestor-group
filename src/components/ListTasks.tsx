@@ -11,7 +11,6 @@ import {
   getTasks,
   removeTask,
 } from "@/libs/lib_tasks";
-import { supabase } from "@/supabase/supabase";
 
 interface PropsListTasks {
   open: boolean;
@@ -27,52 +26,38 @@ function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
     if (newTasks.length > 0) setTasks(newTasks);
   };
 
+  const deleteTask = async (idTask: number) => {
+    const taskRemoved = await removeTask(idTask);
+    if (taskRemoved) {
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== idTask));
+    }
+  };
+
+  const completingTask = async (value: boolean, idTask: number) => {
+    const taskCompleted = await completeTask(value, idTask);
+    if (taskCompleted) {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === idTask ? { ...task, completed: value } : task
+        )
+      );
+    }
+  };
+
   const addTask = async (newTask: string) => {
-    addNewTask({
+    const taskAdded = await addNewTask({
       task: newTask,
       project_id: id,
       completed: false,
     });
+
+    if (taskAdded) {
+      setTasks((prevTasks) => [...prevTasks, taskAdded]);
+    }
   };
 
   useEffect(() => {
     getAllTasks();
-
-    const channel = supabase
-      .channel("custom-all-channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "tasks",
-        },
-        (payload) => {
-          if (payload.eventType === "INSERT") {
-            setTasks((prevTasks) => [...prevTasks, payload.new]);
-          }
-          if (payload.eventType === "DELETE") {
-            setTasks((prevTasks) =>
-              prevTasks.filter((task) => task.id !== payload.old.id)
-            );
-          }
-          if (payload.eventType === "UPDATE") {
-            const newTask = payload.new;
-            setTasks((prevTasks) =>
-              prevTasks.map((task) =>
-                task.id == newTask.id
-                  ? { ...task, completed: newTask.completed }
-                  : task
-              )
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, [id]);
 
   return (
@@ -109,7 +94,7 @@ function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
                     height={20}
                     loading="lazy"
                     className="icon-controls-task"
-                    onClick={() => completeTask(!item.completed, item.id)}
+                    onClick={() => completingTask(!item.completed, item.id)}
                   />
                   <img
                     src={iconDelete.src}
@@ -119,7 +104,7 @@ function ListTasks({ open, handleOpenList, id }: PropsListTasks) {
                     height={20}
                     loading="lazy"
                     className="icon-controls-task"
-                    onClick={() => removeTask(item.id)}
+                    onClick={() => deleteTask(item.id)}
                   />
                 </div>
               </li>

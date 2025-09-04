@@ -14,7 +14,8 @@ export const addNewMessage = async (newMsg: {
     console.log(error);
     throw new Error("Error Adding message");
   }
-  console.log(data);
+
+  return data[0];
 };
 
 export const getMessages = async (id: number) => {
@@ -39,5 +40,5 @@ export const deleteMessage = async (idMessage: number) => {
     console.log(error);
     throw new Error("Error Removing message");
   }
-  console.log(data);
+  return data[0];
 };

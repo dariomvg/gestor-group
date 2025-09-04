@@ -3,8 +3,7 @@ import { addNewMessage, getMessages, deleteMessage } from "@/libs/lib_chat";
 import "../styles/chat.css";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { getLocalHour, getShortDate } from "format-all-dates";
-import { supabase } from "@/supabase/supabase";
-import iconDelete from "@/assets/icons/delete.svg"
+import iconDelete from "@/assets/icons/delete.svg";
 
 function Chat({
   open,
@@ -23,39 +22,32 @@ function Chat({
     if (newMessages.length > 0) setMessages(newMessages);
   };
 
-  const submitFormChat = (e: FormEvent<HTMLFormElement>) => {
+  const removeMessage = async (id: number) => {
+    const msgDeleted = await deleteMessage(id);
+    if (msgDeleted) {
+      setMessages((prev) => prev.filter((msg) => msg.id !== id));
+    }
+  };
+
+  const submitFormChat = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newMsg = refInput.current.value;
     if (!newMsg) return;
     const date_msg = `${getShortDate()} - ${getLocalHour()}Hs`;
-    addNewMessage({ username, message: newMsg, date_msg, project_id });
+    const msgAdded = await addNewMessage({
+      username,
+      message: newMsg,
+      date_msg,
+      project_id,
+    });
+    if (msgAdded) {
+      setMessages((prev) => [...prev, msgAdded]);
+    }
     refInput.current.value = "";
   };
 
   useEffect(() => {
     getAllMessages();
-
-    const channel = supabase
-      .channel("custom-all-channel")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "messages" },
-        (payload) => {
-          console.log("payload: ",payload)
-          if (payload.eventType === "INSERT") {
-            setMessages((prevMessages) => [...prevMessages, payload.new]);
-          }
-          if (payload.eventType === "DELETE") {
-            setMessages((prevMessages) =>
-              prevMessages.filter((msg) => msg.id !== payload.old.id)
-            );
-          }
-        }
-      ).subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, [project_id]);
 
   return (
@@ -67,9 +59,16 @@ function Chat({
               <div className="container-message">
                 <strong className="username-message">{item.username}</strong>
                 <div className="container-delete-message">
-                <p className="date-message">{item.date_msg}</p>
-                <img src={iconDelete.src} alt="icon eliminar mensaje" width={20} height={20} title="Eliminar mensaje" className="icon-delete-msg" onClick={() => deleteMessage(item.id)} />
-        
+                  <p className="date-message">{item.date_msg}</p>
+                  <img
+                    src={iconDelete.src}
+                    alt="icon eliminar mensaje"
+                    width={20}
+                    height={20}
+                    title="Eliminar mensaje"
+                    className="icon-delete-msg"
+                    onClick={() => removeMessage(item.id)}
+                  />
                 </div>
               </div>
               <p className="content-message">{item.message}</p>
